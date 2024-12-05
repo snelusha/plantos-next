@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.db"
+}
+
+model Section {
+  id         String   @id @default(cuid())
+  created_at DateTime @default(now())
+
+  blocks Block[]
+
+  @@map("sections")
+}
+
+model Block {
+  id String @id @default(cuid())
+
+  type    String?
+  device  String?
+  unit    String?
+  channel Int?
+  period  Int?
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  section_id String
+  section    Section @relation(fields: [section_id], references: [id])
+
+  @@map("blocks")
+}
